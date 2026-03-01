@@ -32,8 +32,20 @@ async def main():
         result = task.result()  # This is safe because the tasks are done.
         print(f"Result of Task {i}: {result}")
 
+async def sequential():
+    # Note 12: This demonstrates sequential execution of tasks.
+    result1 = await fetch_data(1, "Alice", 2)
+    print(f"Sequential Result 1: {result1}")
+    
+    result2 = await fetch_data(2, "Bob", 3)
+    print(f"Sequential Result 2: {result2}")
+    
+    result3 = await fetch_data(3, "Charlie", 1)
+    print(f"Sequential Result 3: {result3}")
+
 
 
 # Note 16: This is the script entry point for async programs.
 # Note 17: asyncio.run creates an event loop, runs main(), then closes the loop.
 asyncio.run(main())
+asyncio.run(sequential())

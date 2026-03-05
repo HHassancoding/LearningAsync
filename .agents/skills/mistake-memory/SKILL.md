@@ -42,3 +42,19 @@ Use this structure when writing to the log file:
 - Prefer short bullets over long paragraphs.
 - Focus on concepts that affect correctness.
 - Keep tone encouraging and direct.
+
+## Mistake Log
+
+- Date: 2026-03-05
+- Topic: Python type hints vs real runtime objects (`list`, `dict`)
+- Mistake: Used type expressions like `json_list = list[dict]` or `json_list: [Dict] = []` and expected list methods to work the same as a real list object.
+- Correct Understanding: `list[...]` and `dict[...]` are type hint syntax, not data instances. Create real containers with `[]` or `{}` first, then annotate separately.
+- Remember Rule: Initialize first, annotate second. Example: `json_list: list[dict[str, str | float]] = []`.
+- Self-Check: If you call `.append(...)`, confirm the variable was created with `[]` and not assigned to a type expression.
+
+## Before Similar Tasks
+
+- Create the runtime value first (`[]`, `{}`, `0`, `""`), then add type hints.
+- Use `append()` for lists and `update()` for dicts; never swap them.
+- Validate one tiny example in REPL before wiring into Typer commands.
+- Avoid built-in names like `type`; prefer `transaction_type`.

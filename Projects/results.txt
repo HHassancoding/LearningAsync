@@ -1,0 +1,72 @@
+[
+  {
+    "timestamp": "2024-06-01T12:00:00Z",
+    "amount": 0.0,
+    "currency": "USD",
+    "type": "deposit",
+    "raw_data": "2024-06-01T12:00:00Z hgh USD deposit"
+  },
+  {
+    "timestamp": "2024-06-02T09:15:00Z",
+    "amount": -45.5,
+    "currency": "USD",
+    "type": "grocery",
+    "raw_data": "2024-06-02T09:15:00Z -45.5 USD grocery"
+  },
+  {
+    "timestamp": "2024-06-03T18:30:00Z",
+    "amount": -12.99,
+    "currency": "USD",
+    "type": "coffee",
+    "raw_data": "2024-06-03T18:30:00Z -12.99 USD coffee"
+  },
+  {
+    "timestamp": "2024-06-04T07:50:00Z",
+    "amount": 1500.0,
+    "currency": "GBP",
+    "type": "salary",
+    "raw_data": "2024-06-04T07:50:00Z 1500.0 GBP salary"
+  },
+  {
+    "timestamp": "2024-06-05T21:10:00Z",
+    "amount": -60.0,
+    "currency": "GBP",
+    "type": "transport",
+    "raw_data": "2024-06-05T21:10:00Z -60.0 GBP transport"
+  },
+  {
+    "timestamp": "2024-06-06T14:05:00Z",
+    "amount": -9.99,
+    "currency": "USD",
+    "type": "subscription",
+    "raw_data": "2024-06-06T14:05:00Z -9.99 USD subscription"
+  },
+  {
+    "timestamp": "2024-06-07T11:20:00Z",
+    "amount": -120.0,
+    "currency": "GBP",
+    "type": "rent",
+    "raw_data": "2024-06-07T11:20:00Z -120.0 GBP rent"
+  },
+  {
+    "timestamp": "2024-06-08T16:45:00Z",
+    "amount": -25.0,
+    "currency": "USD",
+    "type": "restaurant",
+    "raw_data": "2024-06-08T16:45:00Z -25.0 USD restaurant"
+  },
+  {
+    "timestamp": "2024-06-09T10:00:00Z",
+    "amount": 200.0,
+    "currency": "GBP",
+    "type": "transfer",
+    "raw_data": "2024-06-09T10:00:00Z 200.0 GBP transfer"
+  },
+  {
+    "timestamp": "2024-06-10T19:30:00Z",
+    "amount": -5.5,
+    "currency": "USD",
+    "type": "snack",
+    "raw_data": "2024-06-10T19:30:00Z -5.5 USD snack"
+  }
+]

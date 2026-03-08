@@ -85,7 +85,28 @@ async def catagorise():
     print("results.txt has been created with the parsed data.")
 
 
+async def catagorize_job(entry: dict[str, str | float]):
+    # i want a function that will run on one dict and then add the category based on amount
+    amount = entry['amount']
+    if amount <0:
+        entry['category'] = 'expense'
+    elif amount > 0:
+        entry['category'] = 'income'
+    else:
+        entry['category'] = 'unknown'
+    return entry
 
+async def catagorize_all(entries: list[dict[str, str | float]]) -> list[dict[str, str | float]]:
+    async with asyncio.TaskGroup() as tg:
+        tasks = []
+        for item in entries:
+            tasks.append(tg.create_task(catagorize_job(item)))
+
+    results = [task.result() for task in tasks]
+    return results
+          
+
+        
 
 
 if __name__ == "__main__":

@@ -1,17 +1,25 @@
+import os
+
 import typer
 import json
 import asyncio
 app = typer.Typer()
+from google import genai
+from dotenv import load_dotenv
+
+load_dotenv()
+client = genai.Client(api_key=os.environ.get("GENAI_API_KEY"))
+MODEL_NAME = "gemini-2.5-flash"
 
 
 
-json_template = dict[
-    "timestamp": str,
-    "amount": float,
-    "currency": str,
-    "type": str,
-    "raw_data": str,
-    ]
+#json_template = dict[
+    #"timestamp": str,
+    #"amount": float,
+    #"currency": str,
+    #"type": str,
+    #"raw_data": str,
+    #"category": str]
 
 json_list: list[dict[str,str | float]] = []
 
@@ -60,7 +68,7 @@ def parse_line (line: str) -> dict[str,str | float]:
 
 
 @app.command("parse-file")
-def parse_file(file_path: str):
+def parse_file(file_path: str, output: str):
     json_list.clear()
     with open(file_path, "r") as f:
         for line in f:
@@ -68,33 +76,49 @@ def parse_file(file_path: str):
             if not stripped_line:
                 continue
             parse_line(stripped_line)
-
-        with open("results.txt", "w") as f:
-            f.write(json.dumps(json_list, indent=2))  
-        typer.echo("results.txt has been created with the parsed data.") 
-
-
-
-async def catagorise():
-    async with asyncio.TaskGroup() as tg:
-        for item in json_list:
-            with open("results.txt", "w") as f:
-                f.write(json.dumps(item, indent=4))
+            
+        
+        results = asyncio.run((catagorize_all(json_list)))
+    
+        with open(output, "w") as f:
+            f.write(json.dumps(results, indent=2))  
+        typer.echo(f"{output} has been created with the parsed data.") 
 
 
-    print("results.txt has been created with the parsed data.")
+async def call_gemini(entry: dict[str, str | float]) -> str:
+    prompt = f"""You are a financial assistant that categorizes transactions.
+    Categorize the following transaction  amount:
+    {json.dumps(entry, indent=2)}
+
+    Return ONLY ONE WORD that best describes the transaction.
+    Be as creative as possible with the categories nothing like income expense you have your free will to label these transcations but remeber. ONLY ONE WORD.
+    """
+    response = client.models.generate_content(
+        model=MODEL_NAME,
+        contents= prompt
+    )
+    text = response.text.strip().lower()
+    return text 
 
 
 async def catagorize_job(entry: dict[str, str | float]):
-    # i want a function that will run on one dict and then add the category based on amount
-    amount = entry['amount']
-    if amount <0:
-        entry['category'] = 'expense'
-    elif amount > 0:
-        entry['category'] = 'income'
-    else:
-        entry['category'] = 'unknown'
+
+    try:
+        category = await call_gemini(entry)
+    except Exception as e:
+        print(f"Error calling Gemini API for entry {entry['raw_data']}: {e}")
+        # i want a function that will run on one dict and then add the category based on amount
+        amount = entry['amount']
+        if amount <0:
+            category = 'expense'
+        elif amount > 0:
+            category = 'income'
+        else:
+            category = 'unknown'
+
+    entry['category'] = category
     return entry
+
 
 async def catagorize_all(entries: list[dict[str, str | float]]) -> list[dict[str, str | float]]:
     async with asyncio.TaskGroup() as tg:
